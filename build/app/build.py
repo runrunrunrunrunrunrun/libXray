@@ -23,7 +23,9 @@ class Builder(object):
     ):
         self.build_dir = build_dir
         self.lib_dir = os.path.abspath(os.path.join(self.build_dir, ".."))
-        self.use_local_xray_core = use_local_xray_core
+        self.use_local_xray_core = (
+            use_local_xray_core or os.environ.get("LIBXRAY_LOCAL_XRAY_CORE") == "1"
+        )
         self.keep_go_env_snapshot = keep_go_env_snapshot
         self.xray_core_replace_path = f"../{LOCAL_XRAY_CORE_DIR_NAME}"
         self.xray_core_dir = os.path.abspath(
@@ -106,6 +108,27 @@ class Builder(object):
             )
             if ret.returncode != 0:
                 raise Exception("go get xray-core failed")
+
+        ret = subprocess.run(
+            [
+                "go",
+                "mod",
+                "edit",
+                "-replace=github.com/cloudflare/circl=codeberg.org/cunicu/circl@v0.0.0-20230801113412-fec58fc7b5f6",
+            ]
+        )
+        if ret.returncode != 0:
+            raise Exception("go mod edit circl replace failed")
+
+        ret = subprocess.run(["go", "get", "github.com/pion/stun/v3@v3.1.0"])
+        if ret.returncode != 0:
+            raise Exception("go get pion/stun/v3 failed")
+
+        ret = subprocess.run(
+            ["go", "get", "gvisor.dev/gvisor@v0.0.0-20260219192049-0f2374377e89"]
+        )
+        if ret.returncode != 0:
+            raise Exception("go get gvisor failed")
 
         ret = subprocess.run(
             [

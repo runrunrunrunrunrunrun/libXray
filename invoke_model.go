@@ -22,6 +22,9 @@ const (
 	LibXrayMethodStopXray                    LibXrayMethod = "stopXray"
 	LibXrayMethodXrayVersion                 LibXrayMethod = "xrayVersion"
 	LibXrayMethodGetXrayState                LibXrayMethod = "getXrayState"
+	LibXrayMethodNetBirdStartOAuth           LibXrayMethod = "netbirdStartOAuth"
+	LibXrayMethodNetBirdCompleteOAuth        LibXrayMethod = "netbirdCompleteOAuth"
+	LibXrayMethodNetBirdCancelOAuth          LibXrayMethod = "netbirdCancelOAuth"
 )
 
 type LibXrayInvokeRequest struct {
@@ -123,4 +126,20 @@ type XrayVersionResponse struct {
 
 type GetXrayStateResponse struct {
 	Running bool `json:"running"`
+}
+
+type NetBirdStartOAuthRequest struct {
+	ManagementUrl      string `json:"managementUrl,omitempty"`
+	ExistingPrivateKey string `json:"existingPrivateKey,omitempty"`
+	TimeoutSeconds     int    `json:"timeoutSeconds,omitempty"`
+}
+
+type NetBirdCompleteOAuthRequest struct {
+	SessionId      string `json:"sessionId,omitempty"`
+	DeviceName     string `json:"deviceName,omitempty"`
+	TimeoutSeconds int    `json:"timeoutSeconds,omitempty"`
+}
+
+type NetBirdCancelOAuthRequest struct {
+	SessionId string `json:"sessionId,omitempty"`
 }

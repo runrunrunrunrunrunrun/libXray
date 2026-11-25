@@ -98,6 +98,13 @@ func pingBatch(
 			results[index] = failedPingBatchResult(nodep.PingDelayError, err)
 			continue
 		}
+		if hasProtocol(namespaced, "netbird") {
+			results[index] = failedPingBatchResult(
+				nodep.PingDelayError,
+				errors.New("netbird outbound does not support single-node ping"),
+			)
+			continue
+		}
 		prepared = append(prepared, preparedPingItem{
 			resultIndex: index,
 			outboundTag: outboundTag,
@@ -167,6 +174,15 @@ func validatePingBatchRequest(
 		return errors.New("ping batch URL must be an absolute HTTP or HTTPS URL")
 	}
 	return nil
+}
+
+func hasProtocol(outbounds []conf.OutboundDetourConfig, protocol string) bool {
+	for _, ob := range outbounds {
+		if strings.EqualFold(ob.Protocol, protocol) {
+			return true
+		}
+	}
+	return false
 }
 
 func readPingOutbounds(xrayJSON string) ([]conf.OutboundDetourConfig, error) {

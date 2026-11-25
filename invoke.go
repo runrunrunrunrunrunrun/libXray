@@ -1,14 +1,17 @@
 package libXray
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/xtls/libxray/geo"
 	"github.com/xtls/libxray/nodep"
 	"github.com/xtls/libxray/share"
 	"github.com/xtls/libxray/xray"
+	"github.com/xtls/xray-core/proxy/netbird"
 )
 
 type invokeResponse struct {
@@ -59,6 +62,12 @@ func Invoke(requestJSON string) string {
 		return encodeInvokeResponse(&XrayVersionResponse{Version: xray.XrayVersion()}, nil)
 	case LibXrayMethodGetXrayState:
 		return encodeInvokeResponse(&GetXrayStateResponse{Running: xray.GetXrayState()}, nil)
+	case LibXrayMethodNetBirdStartOAuth:
+		return invokeNetBirdStartOAuth(request.Payload)
+	case LibXrayMethodNetBirdCompleteOAuth:
+		return invokeNetBirdCompleteOAuth(request.Payload)
+	case LibXrayMethodNetBirdCancelOAuth:
+		return invokeNetBirdCancelOAuth(request.Payload)
 	default:
 		return encodeInvokeResponse(nil, errors.New("unknown method"))
 	}
@@ -250,4 +259,50 @@ func invokeRunXray(payload json.RawMessage) string {
 	}
 	err = xray.RunXray(request.XrayJson)
 	return encodeInvokeNoDataResponse(err)
+}
+
+func invokeNetBirdStartOAuth(payload json.RawMessage) string {
+	request, err := decodePayload[NetBirdStartOAuthRequest](payload)
+	if err != nil {
+		return encodeInvokeResponse(nil, err)
+	}
+	timeout := 30 * time.Second
+	if request.TimeoutSeconds > 0 {
+		timeout = time.Duration(request.TimeoutSeconds) * time.Second
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	res, err := netbird.StartOAuthSession(ctx, request.ManagementUrl, request.ExistingPrivateKey)
+	return encodeInvokeResponse(res, err)
+}
+
+func invokeNetBirdCompleteOAuth(payload json.RawMessage) string {
+	request, err := decodePayload[NetBirdCompleteOAuthRequest](payload)
+	if err != nil {
+		return encodeInvokeResponse(nil, err)
+	}
+	if request.SessionId == "" {
+		return encodeInvokeResponse(nil, errors.New("missing sessionId"))
+	}
+	timeout := 5 * time.Minute
+	if request.TimeoutSeconds > 0 {
+		timeout = time.Duration(request.TimeoutSeconds) * time.Second
+	}
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+
+	res, err := netbird.CompleteOAuthSession(ctx, request.SessionId, request.DeviceName)
+	return encodeInvokeResponse(res, err)
+}
+
+func invokeNetBirdCancelOAuth(payload json.RawMessage) string {
+	request, err := decodePayload[NetBirdCancelOAuthRequest](payload)
+	if err != nil {
+		return encodeInvokeNoDataResponse(err)
+	}
+	if request.SessionId != "" {
+		netbird.CancelOAuthSession(request.SessionId)
+	}
+	return encodeInvokeNoDataResponse(nil)
 }

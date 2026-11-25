@@ -7,6 +7,7 @@ import (
 
 	c "github.com/xtls/libxray/controller"
 	"github.com/xtls/libxray/dns"
+	"github.com/xtls/xray-core/proxy/netbird"
 )
 
 type DialerController interface {
@@ -38,6 +39,9 @@ type ProcessFinder interface {
 
 func RegisterDialerController(controller DialerController) {
 	c.RegisterDialerController(func(fd uintptr) bool {
+		return controller.ProtectFd(int(fd))
+	})
+	netbird.SetAndroidProtectSocket(func(fd int32) bool {
 		return controller.ProtectFd(int(fd))
 	})
 }
