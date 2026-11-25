@@ -120,6 +120,17 @@ class Builder(object):
         if ret.returncode != 0:
             raise Exception("go mod edit circl replace failed")
 
+        ret = subprocess.run(
+            [
+                "go",
+                "mod",
+                "edit",
+                "-replace=github.com/netbirdio/netbird=github.com/runrunrunrunrunrunrun/netbird@v0.83.2-onexray.1",
+            ]
+        )
+        if ret.returncode != 0:
+            raise Exception("go mod edit netbird replace failed")
+
         ret = subprocess.run(["go", "get", "github.com/pion/stun/v3@v3.1.0"])
         if ret.returncode != 0:
             raise Exception("go get pion/stun/v3 failed")

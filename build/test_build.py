@@ -140,7 +140,23 @@ class BuildTest(unittest.TestCase):
                         call(["go", "mod", "edit", f"-dropreplace={XRAY_CORE_MOD_NAME}"]),
                         call(["go", "get", f"{XRAY_CORE_MOD_NAME}@{DEFAULT_XRAY_CORE_VERSION}"]),
                     ])
-                expected.append(call(["go", "mod", "tidy"]))
+                expected.extend([
+                    call([
+                        "go",
+                        "mod",
+                        "edit",
+                        "-replace=github.com/cloudflare/circl=codeberg.org/cunicu/circl@v0.0.0-20230801113412-fec58fc7b5f6",
+                    ]),
+                    call([
+                        "go",
+                        "mod",
+                        "edit",
+                        "-replace=github.com/netbirdio/netbird=github.com/runrunrunrunrunrunrun/netbird@v0.83.2-onexray.1",
+                    ]),
+                    call(["go", "get", "github.com/pion/stun/v3@v3.1.0"]),
+                    call(["go", "get", "gvisor.dev/gvisor@v0.0.0-20260219192049-0f2374377e89"]),
+                    call(["go", "mod", "tidy"]),
+                ])
                 self.assertEqual(commands.call_args_list, expected)
 
     def test_default_initialization_keeps_existing_modules(self):

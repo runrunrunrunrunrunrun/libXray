@@ -131,6 +131,7 @@ type GetXrayStateResponse struct {
 type NetBirdStartOAuthRequest struct {
 	ManagementUrl      string `json:"managementUrl,omitempty"`
 	ExistingPrivateKey string `json:"existingPrivateKey,omitempty"`
+	ForceDeviceFlow    bool   `json:"forceDeviceFlow,omitempty"`
 	TimeoutSeconds     int    `json:"timeoutSeconds,omitempty"`
 }
 

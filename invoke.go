@@ -273,7 +273,11 @@ func invokeNetBirdStartOAuth(payload json.RawMessage) string {
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
 	defer cancel()
 
-	res, err := netbird.StartOAuthSession(ctx, request.ManagementUrl, request.ExistingPrivateKey)
+	res, err := netbird.StartOAuthSessionWithOptions(ctx, netbird.OAuthStartOptions{
+		ManagementURL:      request.ManagementUrl,
+		ExistingPrivateKey: request.ExistingPrivateKey,
+		ForceDeviceFlow:    request.ForceDeviceFlow,
+	})
 	return encodeInvokeResponse(res, err)
 }
 

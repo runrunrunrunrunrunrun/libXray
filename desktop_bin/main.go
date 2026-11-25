@@ -9,12 +9,17 @@ import (
 
 	"github.com/xtls/libxray/dns"
 	"github.com/xtls/libxray/xray"
+	"github.com/xtls/xray-core/proxy/netbird"
 )
 
 func run(options runOptions) error {
 	config, err := os.ReadFile(options.configPath)
 	if err != nil {
 		return err
+	}
+	if options.interfaceName != "" {
+		netbird.SetOutboundInterface(options.interfaceName)
+		defer netbird.SetOutboundInterface("")
 	}
 	if options.setDNS {
 		if err := dns.SetDNS(options.dns, options.interfaceName); err != nil {
