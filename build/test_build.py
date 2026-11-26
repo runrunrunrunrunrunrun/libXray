@@ -151,7 +151,7 @@ class BuildTest(unittest.TestCase):
                         "go",
                         "mod",
                         "edit",
-                        "-replace=github.com/netbirdio/netbird=github.com/runrunrunrunrunrunrun/netbird@v0.83.2-onexray.1",
+                        "-replace=github.com/netbirdio/netbird=github.com/runrunrunrunrunrunrun/netbird@v0.83.2-onexray.2",
                     ]),
                     call(["go", "get", "github.com/pion/stun/v3@v3.1.0"]),
                     call(["go", "get", "gvisor.dev/gvisor@v0.0.0-20260219192049-0f2374377e89"]),

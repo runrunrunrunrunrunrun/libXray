@@ -125,7 +125,7 @@ class Builder(object):
                 "go",
                 "mod",
                 "edit",
-                "-replace=github.com/netbirdio/netbird=github.com/runrunrunrunrunrunrun/netbird@v0.83.2-onexray.1",
+                "-replace=github.com/netbirdio/netbird=github.com/runrunrunrunrunrunrun/netbird@v0.83.2-onexray.2",
             ]
         )
         if ret.returncode != 0:
