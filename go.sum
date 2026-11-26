@@ -454,8 +454,8 @@ github.com/rogpeppe/go-internal v1.16.0 h1:O9DK+vNMDVGLr2BeZqmpLeMjiMNkuXfcqntWb
 github.com/rogpeppe/go-internal v1.16.0/go.mod h1:DrUVZyrJU+txYW5/1kwtXQSMFio52ZOxX7yM1VHvnxs=
 github.com/rs/xid v1.3.0 h1:6NjYksEUlhurdVehpc7S7dk6DAmcKv8V9gG0FsVN2U4=
 github.com/rs/xid v1.3.0/go.mod h1:trrq9SKmegXys3aeAKXMUTdJsYXVwGY3RLcfgqegfbg=
-github.com/runrunrunrunrunrunrun/netbird v0.83.2-onexray.3 h1:VDXPnbCOTNXFj/H3q2+KGCJxnO3ri49ykbxG5wnMIj0=
-github.com/runrunrunrunrunrunrun/netbird v0.83.2-onexray.3/go.mod h1:FiIbzr/UoItZ+jXp3A4EVJkGKhrodSj7C7JhqrzbxWM=
+github.com/runrunrunrunrunrunrun/netbird v0.83.2-onexray.4 h1:WsyDhOvzUOEIjm8UEZ8+FyBEH5zhGUKZsAyTJ/7pSz0=
+github.com/runrunrunrunrunrunrun/netbird v0.83.2-onexray.4/go.mod h1:FiIbzr/UoItZ+jXp3A4EVJkGKhrodSj7C7JhqrzbxWM=
 github.com/russellhaering/goxmldsig v1.6.0 h1:8fdWXEPh2k/NZNQBPFNoVfS3JmzS4ZprY/sAOpKQLks=
 github.com/russellhaering/goxmldsig v1.6.0/go.mod h1:TrnaquDcYxWXfJrOjeMBTX4mLBeYAqaHEyUeWPxZlBM=
 github.com/ryanuber/go-glob v1.0.0 h1:iQh3xXAumdQ+4Ufa5b25cRpC5TYKlno6hsv6Cb3pkBk=
