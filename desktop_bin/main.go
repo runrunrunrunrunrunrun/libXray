@@ -3,6 +3,7 @@
 package main
 
 import (
+	"fmt"
 	"os"
 	"os/signal"
 	"syscall"
@@ -40,5 +41,12 @@ func run(options runOptions) error {
 }
 
 func main() {
+	if len(os.Args) == 2 && os.Args[1] == "serve-invoke" {
+		if err := serveInvoke(os.Stdin, os.Stdout); err != nil {
+			fmt.Fprintln(os.Stderr, err)
+			os.Exit(1)
+		}
+		return
+	}
 	os.Exit(execute(os.Args[1:], run, os.Stdout, os.Stderr))
 }

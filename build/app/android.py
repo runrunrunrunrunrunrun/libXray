@@ -31,7 +31,7 @@ class AndroidBuilder(Builder):
                     "gomobile",
                     "bind",
                     "-target",
-                    "android",
+                    "android/arm64,android/amd64",
                     "-androidapi",
                     str(api),
                     "-trimpath",

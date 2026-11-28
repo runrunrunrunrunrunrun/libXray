@@ -22,13 +22,11 @@ class WindowsBuilder(Builder):
 
     def before_build(self):
         super().before_build()
-        self.prepare_static_lib()
 
     def build(self):
         self.snapshot_go_env()
         try:
             self.before_build()
-            self.build_windows()
             self.build_desktop_bin(self.bin_file)
         finally:
             self.restore_go_env()

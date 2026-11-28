@@ -220,8 +220,21 @@ class BuildTest(unittest.TestCase):
             ):
                 self.builder.build()
                 args = run.call_args.args[0]
+                self.assertEqual(args[args.index("-target") + 1], "android/arm64,android/amd64")
                 self.assertEqual(args[args.index("-androidapi") + 1], api)
                 self.assertTrue(args[-1].endswith("-extldflags=-Wl,-z,max-page-size=16384" + packing))
+
+    def test_desktop_builders_build_only_desktop_bin(self):
+        for builder_type in (WindowsBuilder, LinuxBuilder):
+            with self.subTest(builder=builder_type.__name__):
+                builder = builder_type(str(self.root / "build"))
+                with (
+                    patch.object(builder, "before_build") as before_build,
+                    patch.object(builder, "build_desktop_bin") as build_bin,
+                ):
+                    builder.build()
+                    before_build.assert_called_once_with()
+                    build_bin.assert_called_once_with(builder.bin_file)
 
     def test_gomobile_and_gobind_use_the_same_resolved_version(self):
         version = "v0.0.0-20260821190718-4776eadac327"
